@@ -7,17 +7,17 @@ interface Props {
 }
 
 const {
-  title = 'Adopciones KalÃ¶ | Rescate y adopciÃ³n de perros en Costa Rica',
-  description = 'OrganizaciÃ³n de rescate y adopciÃ³n de perros en Costa Rica. Conoce perritos en adopciÃ³n, dona y ayuda a transformar vidas.'
+  title = 'Adopciones Kalö | Rescate y adopción de perros en Costa Rica',
+  description = 'Organización de rescate y adopción de perros en Costa Rica. Conoce perritos en adopción, dona y ayuda a transformar vidas.'
 } = Astro.props;
 
 const pathname = Astro.url.pathname;
 
 const navItems = [
   { href: '/', label: 'Inicio' },
-  { href: '/perros/', label: 'Perros en AdopciÃ³n' },
+  { href: '/perros/', label: 'Perros en Adopción' },
   { href: '/nuestra-historia/', label: 'Nuestra Historia' },
-  { href: '/como-ayudar/', label: 'CÃ³mo Ayudar / Donar' },
+  { href: '/como-ayudar/', label: 'Cómo Ayudar / Donar' },
   { href: '/contacto/', label: 'Contacto' }
 ];
 ---
@@ -41,9 +41,9 @@ const navItems = [
     <header class="sticky top-0 z-40 border-b border-[#eaded6] bg-[#fcfaf7]/95 backdrop-blur">
       <div class="container flex flex-wrap items-center justify-between gap-4 py-3">
         <a href="/" class="flex items-center gap-3">
-          <img src="/logo-kalo.png" alt="Logo Adopciones KalÃ¶" class="h-12 w-auto max-w-[180px] rounded-xl border border-[#d9d1ca] bg-white/70 p-1" />
+          <img src="/logo-kalo.png" alt="Logo Adopciones Kalö" class="h-12 w-auto max-w-[180px] rounded-xl border border-[#d9d1ca] bg-white/70 p-1" />
           <div>
-            <p class="logo-font text-lg font-bold leading-tight text-[#312c29]">Adopciones KalÃ¶</p>
+            <p class="logo-font text-lg font-bold leading-tight text-[#312c29]">Adopciones Kalö</p>
             <p class="text-xs text-[#7f6f67]">Costa Rica</p>
           </div>
         </a>
@@ -67,7 +67,7 @@ const navItems = [
 
     <footer class="mt-20 border-t border-[#eaded6] bg-white/90">
       <div class="container flex flex-wrap items-center justify-between gap-4 py-8 text-sm text-[#6d625e]">
-        <p>&copy; {new Date().getFullYear()} Adopciones KalÃ¶. Rescate y adopciÃ³n responsable.</p>
+        <p>&copy; {new Date().getFullYear()} Adopciones Kalö. Rescate y adopción responsable.</p>
         <div class="flex flex-wrap items-center gap-4">
           <a class="hover:text-[#dd5f4a]" href="https://www.instagram.com/adopcioneskalo" target="_blank" rel="noreferrer">@adopcioneskalo</a>
           <a class="hover:text-[#dd5f4a]" href="mailto:adopcioneskalo@gmail.com">adopcioneskalo@gmail.com</a>
