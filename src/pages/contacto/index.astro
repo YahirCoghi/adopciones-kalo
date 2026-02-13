@@ -1,0 +1,26 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import NewsletterForm from '../../components/NewsletterForm.astro';
+---
+
+<Layout title="Contacto | Adopciones Kalö">
+  <section class="container py-12">
+    <div class="grid gap-6 md:grid-cols-2">
+      <article class="surface p-7">
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#7cb5a0]">Contacto</p>
+        <h1 class="mt-2 text-4xl font-extrabold">Hablemos</h1>
+
+        <div class="mt-6 space-y-3 text-sm text-[#5f5551]">
+          <p><strong>Email:</strong> <a class="text-[#dd5f4a]" href="mailto:adopcioneskalo@gmail.com">adopcioneskalo@gmail.com</a></p>
+          <p><strong>Instagram:</strong> <a class="text-[#dd5f4a]" href="https://www.instagram.com/adopcioneskalo" target="_blank" rel="noreferrer">@adopcioneskalo</a></p>
+          <p><strong>Ubicación:</strong> Costa Rica</p>
+        </div>
+
+        <a class="button button-primary mt-6" href="https://ig.me/m/adopcioneskalo" target="_blank" rel="noreferrer">Escribir por Instagram</a>
+      </article>
+
+      <NewsletterForm />
+    </div>
+  </section>
+</Layout>
+

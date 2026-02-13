@@ -1,0 +1,25 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const perrito = Astro.url.searchParams.get('perrito');
+---
+
+<Layout title="Solicitud lista | Adopciones Kalö">
+  <section class="container py-16">
+    <article class="surface mx-auto max-w-2xl p-8 text-center md:p-10">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#7cb5a0]">Solicitud de adopción</p>
+      <h1 class="mt-3 text-4xl font-extrabold">Listo: tu solicitud se copió.</h1>
+      <p class="mt-4 text-[#625854]">
+        Pégala en Instagram y envíala.
+        Adjunta también fotos del hogar y foto de tu cédula.
+      </p>
+      {perrito && <p class="mt-3 text-sm text-[#7a6d66]">Perrito seleccionado: <strong>{perrito}</strong></p>}
+
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="https://ig.me/m/adopcioneskalo" class="button button-primary" target="_blank" rel="noreferrer">Abrir DM Instagram</a>
+        <a href="/perros/" class="button button-secondary">Volver a perritos</a>
+      </div>
+    </article>
+  </section>
+</Layout>
+

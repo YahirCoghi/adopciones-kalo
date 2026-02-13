@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import DogCard from '../components/DogCard.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
+
+const perritos = await getCollection('perritos');
+const destacados = perritos
+  .filter((entry) => entry.data.destacado)
+  .sort((a, b) => b.data.fecha_publicacion.getTime() - a.data.fecha_publicacion.getTime())
+  .slice(0, 3);
+---
+
+<Layout>
+  <section class="container py-12 md:py-16">
+    <div class="surface fade-up grid gap-10 overflow-hidden p-8 md:grid-cols-[1.2fr_0.8fr] md:p-12">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#7cb5a0]">Rescate + adopción responsable</p>
+        <h1 class="mt-3 text-4xl font-extrabold leading-tight md:text-5xl">Cada colita merece una familia segura y amorosa.</h1>
+        <p class="mt-5 max-w-2xl text-lg text-[#655a56]">
+          En Adopciones Kalö rescatamos perritos en situación vulnerable, los rehabilitamos y buscamos hogares comprometidos en Costa Rica.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/perros/" class="button button-primary">Ver perritos en adopción</a>
+          <a href="/como-ayudar/" class="button button-secondary">Donar y ayudar</a>
+        </div>
+      </div>
+      <div class="rounded-3xl bg-[linear-gradient(165deg,#ffe7de,#f1efe8)] p-6">
+        <h2 class="text-2xl font-bold">Proceso de adopción</h2>
+        <ol class="mt-4 space-y-3 text-sm text-[#685d59]">
+          <li>1. Revisa las fichas de perritos disponibles.</li>
+          <li>2. Completa el formulario de solicitud.</li>
+          <li>3. Se copia el resumen y te abrimos el DM de Instagram.</li>
+          <li>4. Pega el resumen, envíalo y adjunta fotos del hogar + foto de cédula.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="container pb-14">
+    <div class="mb-7 flex items-end justify-between gap-4">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#7cb5a0]">Destacados</p>
+        <h2 class="mt-2 text-3xl font-bold">Colitas buscando hogar</h2>
+      </div>
+      <a href="/perros/" class="text-sm font-bold text-[#dd5f4a]">Ver todos</a>
+    </div>
+
+    {
+      destacados.length > 0 ? (
+        <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {destacados.map((dog) => (
+            <DogCard
+              slug={dog.slug}
+              nombre={dog.data.nombre}
+              edad={dog.data.edad}
+              foto={dog.data.foto}
+              estado={dog.data.estado}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="surface p-6 text-sm text-[#6f625d]">Pronto tendremos perritos destacados en esta sección.</div>
+      )
+    }
+  </section>
+
+  <section class="container grid gap-6 pb-16 md:grid-cols-2">
+    <div class="surface fade-up p-7">
+      <h2 class="text-2xl font-bold">Requisitos clave de adopción</h2>
+      <ul class="mt-4 space-y-3 text-sm text-[#6f625d]">
+        <li>Compromiso de 12 a 15 años con cuidados, vacunas y vet.</li>
+        <li>La mascota no puede vivir amarrada ni expuesta a sol o lluvia.</li>
+        <li>Cuota de adopción: ¢20,000 (castración, vacunas, desparasitación y examen de sangre).</li>
+        <li>Después del formulario, enviar por DM fotos del hogar y foto de cédula.</li>
+      </ul>
+    </div>
+    <NewsletterForm />
+  </section>
+</Layout>
+

@@ -1,0 +1,27 @@
+---
+interface Props {
+  slug: string;
+  nombre: string;
+  edad: string;
+  foto: string;
+  estado: 'Disponible' | 'Reservado' | 'Adoptado';
+}
+
+const { slug, nombre, edad, foto, estado } = Astro.props;
+const estadoClass = `status-${estado.toLowerCase()}`;
+---
+
+<article class="surface fade-up overflow-hidden">
+  <a href={`/perros/${slug}/`}>
+    <img src={foto} alt={`Foto de ${nombre}`} class="h-56 w-full object-cover" loading="lazy" />
+  </a>
+  <div class="space-y-4 p-5">
+    <div class="flex items-center justify-between gap-2">
+      <h3 class="text-xl font-bold">{nombre}</h3>
+      <span class={`status-pill ${estadoClass}`}>{estado}</span>
+    </div>
+    <p class="text-sm text-[#716560]">Edad: {edad}</p>
+    <a href={`/perros/${slug}/`} class="button button-secondary w-full">Ver ficha y solicitar adopción</a>
+  </div>
+</article>
+

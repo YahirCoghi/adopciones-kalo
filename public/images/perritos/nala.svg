@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#f8f0ea"/>
+  <circle cx="980" cy="120" r="200" fill="#ffe4d8"/>
+  <circle cx="220" cy="730" r="260" fill="#e8f3ee"/>
+  <ellipse cx="600" cy="540" rx="270" ry="220" fill="#d9b18f"/>
+  <ellipse cx="500" cy="370" rx="90" ry="120" fill="#c58e66"/>
+  <ellipse cx="700" cy="370" rx="90" ry="120" fill="#c58e66"/>
+  <ellipse cx="600" cy="510" rx="160" ry="130" fill="#f4d3b9"/>
+  <circle cx="540" cy="500" r="14" fill="#3f332e"/>
+  <circle cx="660" cy="500" r="14" fill="#3f332e"/>
+  <ellipse cx="600" cy="560" rx="34" ry="26" fill="#3f332e"/>
+  <text x="60" y="120" font-size="62" font-family="'Plus Jakarta Sans', sans-serif" fill="#7b6b63">Nala</text>
+</svg>
+

@@ -1,0 +1,38 @@
+backend:
+  name: git-gateway
+  branch: main
+
+local_backend: true
+
+media_folder: public/uploads/perritos
+public_folder: /uploads/perritos
+
+site_url: https://adopciones-kalo.netlify.app
+display_url: https://adopciones-kalo.netlify.app
+logo_url: /logo-kalo.png
+
+collections:
+  - name: perritos
+    label: Perritos
+    label_singular: Perrito
+    folder: src/content/perritos
+    extension: md
+    format: frontmatter
+    create: true
+    slug: '{{slug}}'
+    summary: '{{nombre}} - {{estado}}'
+    fields:
+      - { label: Nombre, name: nombre, widget: string }
+      - { label: Foto, name: foto, widget: image }
+      - { label: Edad, name: edad, widget: string, hint: 'Ejemplo: 3 meses, 2 años' }
+      - { label: Historia/Situación, name: historia_situacion, widget: markdown }
+      - label: Estado
+        name: estado
+        widget: select
+        options:
+          - Disponible
+          - Reservado
+          - Adoptado
+      - { label: Fecha de publicación, name: fecha_publicacion, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, format: 'YYYY-MM-DD' }
+      - { label: Destacado, name: destacado, widget: boolean, default: false }
+

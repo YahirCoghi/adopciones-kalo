@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#f9f7f3"/>
+  <circle cx="170" cy="120" r="160" fill="#e2f0ea"/>
+  <circle cx="1040" cy="760" r="220" fill="#ffe3d1"/>
+  <ellipse cx="610" cy="520" rx="280" ry="220" fill="#7b5b43"/>
+  <ellipse cx="500" cy="350" rx="95" ry="140" fill="#5a4331"/>
+  <ellipse cx="720" cy="350" rx="95" ry="140" fill="#5a4331"/>
+  <ellipse cx="610" cy="510" rx="170" ry="145" fill="#b79a82"/>
+  <circle cx="550" cy="500" r="15" fill="#2f2520"/>
+  <circle cx="670" cy="500" r="15" fill="#2f2520"/>
+  <ellipse cx="610" cy="565" rx="35" ry="25" fill="#2f2520"/>
+  <text x="60" y="120" font-size="62" font-family="'Plus Jakarta Sans', sans-serif" fill="#6d5c53">Bruno</text>
+</svg>
+

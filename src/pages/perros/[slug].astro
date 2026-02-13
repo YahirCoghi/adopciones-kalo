@@ -1,0 +1,199 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { marked } from 'marked';
+
+export async function getStaticPaths() {
+  const perritos = await getCollection('perritos');
+  return perritos.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const historiaHtml = await marked.parse(data.historia_situacion);
+const dogUrl = new URL(`/perros/${entry.slug}/`, Astro.site ?? new URL(Astro.url.origin)).toString();
+const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`Conoce a ${data.nombre} en Adopciones Kalö: ${dogUrl}`)}`;
+const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(dogUrl)}`;
+const estadoClass = `status-${data.estado.toLowerCase()}`;
+---
+
+<Layout title={`${data.nombre} | Adopciones Kalö`}>
+  <section class="container py-12">
+    <div class="mb-6">
+      <a href="/perros/" class="text-sm font-bold text-[#dd5f4a]">&larr; Volver a perros en adopción</a>
+    </div>
+
+    <div class="grid gap-8 lg:grid-cols-[1fr_1fr]">
+      <article class="surface overflow-hidden">
+        <img src={data.foto} alt={`Foto de ${data.nombre}`} class="h-80 w-full object-cover" />
+        <div class="space-y-5 p-6">
+          <div class="flex items-center justify-between gap-2">
+            <h1 class="text-4xl font-extrabold">{data.nombre}</h1>
+            <span class={`status-pill ${estadoClass}`}>{data.estado}</span>
+          </div>
+
+          <p class="text-sm text-[#6f625d]">Edad: {data.edad}</p>
+
+          <section>
+            <h2 class="text-lg font-bold">Historia / situación</h2>
+            <div class="prose mt-3 max-w-none text-sm leading-relaxed text-[#5b504d]" set:html={historiaHtml} />
+          </section>
+
+          <section class="space-y-3 rounded-2xl border border-[#eaded6] bg-[#fff8f3] p-4">
+            <h3 class="text-sm font-bold uppercase tracking-[0.15em] text-[#7cb5a0]">Compartir</h3>
+            <div class="flex flex-wrap gap-2">
+              <button class="button button-secondary" data-copy-link={dogUrl}>Copiar link del perrito</button>
+              <a class="button button-secondary" href={whatsappUrl} target="_blank" rel="noreferrer">WhatsApp</a>
+              <a class="button button-secondary" href={facebookUrl} target="_blank" rel="noreferrer">Facebook</a>
+            </div>
+            <p class="text-xs text-[#6f625d]">Instagram: copia el link y pégalo en tu historia.</p>
+          </section>
+        </div>
+      </article>
+
+      <section class="surface p-6 md:p-7">
+        <h2 class="text-3xl font-extrabold">Solicitar adopción</h2>
+        <p class="mt-2 text-sm text-[#6f625d]">
+          Completa el formulario. Al enviarlo se copiará automáticamente un resumen para pegar por DM.
+          <strong>Fotos del hogar y foto de cédula se envían por Instagram luego del formulario.</strong>
+        </p>
+
+        <form id="adoption-form" name="solicitud-adopcion" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="mt-6 space-y-6">
+          <input type="hidden" name="form-name" value="solicitud-adopcion" />
+          <input type="hidden" name="perrito_nombre" value={data.nombre} />
+          <input type="hidden" name="perrito_estado" value={data.estado} />
+          <p class="hidden">
+            <label>No llenar: <input name="bot-field" /></label>
+          </p>
+
+          <fieldset class="space-y-3">
+            <legend class="mb-2 text-lg font-bold">A) Datos personales</legend>
+            <label><span class="mb-1 block text-sm font-semibold">Nombre completo</span><input class="input" name="nombre_completo" required /></label>
+            <label><span class="mb-1 block text-sm font-semibold">Cédula</span><input class="input" name="cedula" inputmode="numeric" pattern="[0-9]{6,12}" required /></label>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <label><span class="mb-1 block text-sm font-semibold">Teléfono 1</span><input class="input" name="telefono1" inputmode="tel" required /></label>
+              <label><span class="mb-1 block text-sm font-semibold">Teléfono 2</span><input class="input" name="telefono2" inputmode="tel" required /></label>
+            </div>
+            <label><span class="mb-1 block text-sm font-semibold">Email</span><input class="input" type="email" name="email" required /></label>
+            <label><span class="mb-1 block text-sm font-semibold">Dirección exacta (Provincia/Cantón/Distrito + detalle)</span><textarea class="input" name="direccion" rows="3" required></textarea></label>
+          </fieldset>
+
+          <fieldset class="space-y-3">
+            <legend class="mb-2 text-lg font-bold">B) Sobre el hogar y convivencia</legend>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <label><span class="mb-1 block text-sm font-semibold">Tipo de vivienda</span><select name="tipo_vivienda" required><option value="">Selecciona</option><option>Casa</option><option>Apartamento</option></select></label>
+              <label><span class="mb-1 block text-sm font-semibold">¿Hay patio?</span><select name="patio" required><option value="">Selecciona</option><option>Sí</option><option>No</option></select></label>
+            </div>
+            <label><span class="mb-1 block text-sm font-semibold">¿La mascota vivirá adentro, afuera o ambos?</span><select name="vivira" required><option value="">Selecciona</option><option>Adentro</option><option>Afuera</option><option>Ambos</option></select></label>
+            <label><span class="mb-1 block text-sm font-semibold">¿Hay malla/cerramiento?</span><select name="malla" required><option value="">Selecciona</option><option>Sí</option><option>No</option><option>En proceso</option></select></label>
+            <label><span class="mb-1 block text-sm font-semibold">¿Cuántas horas al día estaría sola?</span><input class="input" name="horas_solo" placeholder="Ejemplo: 4 horas" required /></label>
+            <label><span class="mb-1 block text-sm font-semibold">¿Hay niños(as)? Sí/No (edad aproximada)</span><input class="input" name="ninos" placeholder="Ejemplo: Sí, 6 y 10 años" required /></label>
+            <label><span class="mb-1 block text-sm font-semibold">¿En el hogar todos están de acuerdo con adoptar? Sí/No</span><select name="acuerdo_hogar" required><option value="">Selecciona</option><option>Sí</option><option>No</option></select></label>
+            <label><span class="mb-1 block text-sm font-semibold">¿Otras mascotas? Sí/No (¿cuántas y cuáles?)</span><input class="input" name="otras_mascotas" placeholder="Ejemplo: Sí, 2 gatos" required /></label>
+          </fieldset>
+
+          <fieldset class="space-y-3">
+            <legend class="mb-2 text-lg font-bold">C) Experiencia y motivación</legend>
+            <label><span class="mb-1 block text-sm font-semibold">Experiencia previa con mascotas</span><textarea class="input" name="experiencia" rows="3" required></textarea></label>
+            <label><span class="mb-1 block text-sm font-semibold">¿Por qué quieres adoptar a este perrito?</span><textarea class="input" name="motivacion" rows="3" required></textarea></label>
+          </fieldset>
+
+          <fieldset class="space-y-3">
+            <legend class="mb-2 text-lg font-bold">D) Confirmaciones (obligatorias)</legend>
+            <label class="flex gap-2 text-sm"><input type="checkbox" name="confirmo_cuidados" required />Confirmo que una mascota vive 12-15 años y requiere tiempo, atención veterinaria y vacunas.</label>
+            <label class="flex gap-2 text-sm"><input type="checkbox" name="confirmo_no_amarrada" required />Confirmo que la mascota NO vivirá amarrada ni expuesta al sol/lluvia.</label>
+            <label class="flex gap-2 text-sm"><input type="checkbox" name="confirmo_fotos" required />Confirmo que enviaré por Instagram fotos del hogar y foto de la cédula.</label>
+            <label class="flex gap-2 text-sm"><input type="checkbox" name="confirmo_cuota" required />Acepto la cuota de adopción de ¢20,000 (incluye entrega castrada, vacunada, desparasitada y con examen de sangre).</label>
+          </fieldset>
+
+          <button class="button button-primary w-full" type="submit">Enviar solicitud y abrir Instagram</button>
+          <p id="adoption-feedback" class="text-sm font-semibold"></p>
+        </form>
+      </section>
+    </div>
+  </section>
+
+  <script is:inline>
+    const copyLinkButton = document.querySelector('[data-copy-link]');
+    const feedback = document.querySelector('#adoption-feedback');
+    const form = document.querySelector('#adoption-form');
+
+    const copyToClipboard = async (text) => {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+      const temp = document.createElement('textarea');
+      temp.value = text;
+      document.body.append(temp);
+      temp.select();
+      document.execCommand('copy');
+      temp.remove();
+    };
+
+    copyLinkButton?.addEventListener('click', async () => {
+      try {
+        await copyToClipboard(copyLinkButton.dataset.copyLink || window.location.href);
+        copyLinkButton.textContent = 'Link copiado';
+      } catch {
+        copyLinkButton.textContent = 'No se pudo copiar';
+      }
+    });
+
+    const encode = (data) =>
+      Object.entries(data)
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+        .join('&');
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const formData = new FormData(form);
+      const getValue = (name) => (formData.get(name) || '').toString().trim();
+
+      const resumen = `Hola, quiero solicitar adopción.\n` +
+        `Perrito: ${getValue('perrito_nombre')} (Estado: ${getValue('perrito_estado')})\n` +
+        `Datos: ${getValue('nombre_completo')} | Cédula: ${getValue('cedula')}\n` +
+        `Contacto: Tel1 ${getValue('telefono1')} | Tel2 ${getValue('telefono2')} | Email ${getValue('email')}\n` +
+        `Dirección exacta: ${getValue('direccion')}\n` +
+        `Hogar: ${getValue('tipo_vivienda')}, patio: ${getValue('patio')}, malla: ${getValue('malla')}, vivirá: ${getValue('vivira')}\n` +
+        `Tiempo solo: ${getValue('horas_solo')}\n` +
+        `Niños(as): ${getValue('ninos')}\n` +
+        `En el hogar todos están de acuerdo: ${getValue('acuerdo_hogar')}\n` +
+        `Otras mascotas: ${getValue('otras_mascotas')}\n` +
+        `Experiencia con mascotas: ${getValue('experiencia')}\n` +
+        `Motivación: ${getValue('motivacion')}\n` +
+        `Confirmo requisitos: NO amarrada, cuidados veterinarios, enviaré fotos del hogar y foto cédula, acepto cuota ¢20,000.`;
+
+      try {
+        await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: encode(Object.fromEntries(formData))
+        });
+      } catch {
+        // Continue even if Netlify endpoint is unavailable locally.
+      }
+
+      try {
+        await copyToClipboard(resumen);
+      } catch {
+        feedback.textContent = 'No se pudo copiar automáticamente. Copia manualmente el texto antes de enviarlo.';
+      }
+
+      const igUrl = 'https://ig.me/m/adopcioneskalo';
+      window.open(igUrl, '_blank', 'noopener,noreferrer');
+      window.location.href = `/solicitud-lista/?perrito=${encodeURIComponent(getValue('perrito_nombre'))}`;
+    });
+  </script>
+</Layout>
+
+

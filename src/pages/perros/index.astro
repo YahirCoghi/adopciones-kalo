@@ -1,0 +1,85 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import DogCard from '../../components/DogCard.astro';
+
+const perritos = (await getCollection('perritos')).sort(
+  (a, b) => b.data.fecha_publicacion.getTime() - a.data.fecha_publicacion.getTime()
+);
+---
+
+<Layout title="Perros en Adopción | Adopciones Kalö">
+  <section class="container py-12">
+    <div class="mb-6">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#7cb5a0]">Perros en adopción</p>
+      <h1 class="mt-2 text-4xl font-extrabold">Encuentra tu nueva colita</h1>
+      <p class="mt-3 text-[#6f625d]">Filtra por estado y busca por nombre para encontrar el perrito ideal.</p>
+    </div>
+
+    <div class="surface mb-7 grid gap-4 p-5 md:grid-cols-[2fr_1fr]">
+      <label>
+        <span class="mb-1 block text-sm font-semibold">Buscar por nombre</span>
+        <input class="input" id="dog-search" type="search" placeholder="Ejemplo: Nala" />
+      </label>
+
+      <label>
+        <span class="mb-1 block text-sm font-semibold">Estado</span>
+        <select id="dog-filter">
+          <option value="Todos">Todos</option>
+          <option value="Disponible">Disponible</option>
+          <option value="Reservado">Reservado</option>
+          <option value="Adoptado">Adoptado</option>
+        </select>
+      </label>
+    </div>
+
+    <p id="results-count" class="mb-4 text-sm text-[#6f625d]"></p>
+
+    <div id="dogs-grid" class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {perritos.map((dog) => (
+        <div data-dog-item data-name={dog.data.nombre.toLowerCase()} data-status={dog.data.estado}>
+          <DogCard
+            slug={dog.slug}
+            nombre={dog.data.nombre}
+            edad={dog.data.edad}
+            foto={dog.data.foto}
+            estado={dog.data.estado}
+          />
+        </div>
+      ))}
+    </div>
+
+    <p id="empty-state" class="surface mt-6 hidden p-5 text-sm text-[#6f625d]">No se encontraron perritos con esos filtros.</p>
+  </section>
+
+  <script is:inline>
+    const searchInput = document.querySelector('#dog-search');
+    const filterSelect = document.querySelector('#dog-filter');
+    const dogItems = Array.from(document.querySelectorAll('[data-dog-item]'));
+    const resultsCount = document.querySelector('#results-count');
+    const emptyState = document.querySelector('#empty-state');
+
+    const updateList = () => {
+      const term = searchInput.value.trim().toLowerCase();
+      const status = filterSelect.value;
+
+      let visible = 0;
+
+      dogItems.forEach((item) => {
+        const matchesName = item.dataset.name.includes(term);
+        const matchesStatus = status === 'Todos' || item.dataset.status === status;
+        const show = matchesName && matchesStatus;
+        item.style.display = show ? 'block' : 'none';
+        if (show) visible += 1;
+      });
+
+      resultsCount.textContent = `${visible} perrito(s) encontrado(s).`;
+      emptyState.classList.toggle('hidden', visible > 0);
+    };
+
+    searchInput?.addEventListener('input', updateList);
+    filterSelect?.addEventListener('change', updateList);
+    updateList();
+  </script>
+</Layout>
+
